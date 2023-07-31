@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/sortByName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort by name"
+        android:textSize="18sp"
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/sortByAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort by age"
+        android:textSize="18sp"
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/sortByStudentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort by student status"
+        android:textSize="18sp"
+        android:padding="8dp" />
+
+
+
+</LinearLayout>

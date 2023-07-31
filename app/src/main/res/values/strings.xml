@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Test_2</string>
+    <string name="age_format">Age: %d</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="add_user">add user\n</string>
+    <string name="add_user_1">Add User</string>
+
+</resources>
