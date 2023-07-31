@@ -1,5 +1,6 @@
 package com.example.test_2
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -26,7 +27,9 @@ class AddUserActivity : AppCompatActivity() {
     private lateinit var yearSpinner: Spinner
     private lateinit var addUserButton: Button
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var descriptionEditText: EditText
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_user)
@@ -38,11 +41,11 @@ class AddUserActivity : AppCompatActivity() {
 
         // Find views by their IDs
         nameEditText = findViewById(R.id.nameEditText)
-        ageEditText = findViewById(R.id.ageEditText)
         daySpinner = findViewById(R.id.daySpinner)
         monthSpinner = findViewById(R.id.monthSpinner)
         yearSpinner = findViewById(R.id.yearSpinner)
         addUserButton = findViewById(R.id.addButton)
+        descriptionEditText = findViewById(R.id.descriptionEditText)
 
         // Get the SharedPreferences instance for user data storage
         sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
@@ -74,30 +77,36 @@ class AddUserActivity : AppCompatActivity() {
         yearSpinner.adapter = yearAdapter
 
         // Set click listener for the Add User button
-        addUserButton.setOnClickListener {
-            // Get user input data
-            val name = nameEditText.text.toString()
-            val age = ageEditText.text.toString().toIntOrNull()
-            val day = daySpinner.selectedItem.toString().toInt()
-            val month = monthSpinner.selectedItemPosition
-            val year = yearSpinner.selectedItem.toString().toInt()
 
             // Validate user input
-            if (name.isNotEmpty() && age != null) {
-                // Create a new User object and save it
-                val cal = Calendar.getInstance().apply {
-                    set(year, month, day)
+            addUserButton.setOnClickListener {
+                // Get user input data
+                val name = nameEditText.text.toString()
+                val day = daySpinner.selectedItem.toString().toInt()
+                val month = monthSpinner.selectedItemPosition
+                val year = yearSpinner.selectedItem.toString().toInt()
+                val description = descriptionEditText.text.toString()
+
+                if (name.isNotEmpty()) {
+                    // Calculate age based on selected date of birth
+                    val selectedDateOfBirth = Calendar.getInstance().apply {
+                        set(year, month, day)
+                    }
+                    val today = Calendar.getInstance()
+                    val age = today.get(Calendar.YEAR) - selectedDateOfBirth.get(Calendar.YEAR)
+
+                    // Create a new User object and save it
+                    val newUser = User(User.getNextId(), name, age, false, description) // Include description in the User object
+                    saveUser(newUser)
+                    Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show()
+                    setResult(RESULT_OK)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Please enter valid name", Toast.LENGTH_SHORT).show()
                 }
-                val newUser = User(name, age)
-                saveUser(newUser)
-                Toast.makeText(this, "User added successfully", Toast.LENGTH_SHORT).show()
-                setResult(RESULT_OK)
-                finish()
-            } else {
-                Toast.makeText(this, "Please enter valid name and age", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+
 
     // Handle the back button click event
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -113,6 +122,7 @@ class AddUserActivity : AppCompatActivity() {
     // Save the user data to SharedPreferences
     private fun saveUser(user: User) {
         val userList = retrieveUserList().toMutableList()
+        val newUser = user.copy(id = User.getNextId())
         userList.add(user)
 
         val editor = sharedPreferences.edit()
@@ -126,9 +136,11 @@ class AddUserActivity : AppCompatActivity() {
         val json = sharedPreferences.getString("user_list", null)
         return if (json != null) {
             val typeToken = object : TypeToken<List<User>>() {}.type
-            Gson().fromJson(json, typeToken)
+            val userList = Gson().fromJson<List<User>>(json, typeToken)
+            userList.sortedByDescending { it.isStudent }
         } else {
             emptyList()
         }
     }
+
 }

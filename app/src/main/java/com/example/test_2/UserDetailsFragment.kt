@@ -1,13 +1,12 @@
 package com.example.test_2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.example.test_2.R
-import com.example.test_2.User
 
 // Fragment for displaying the details of a selected user
 class UserDetailsFragment : Fragment() {
@@ -26,6 +25,7 @@ class UserDetailsFragment : Fragment() {
     }
 
     // Called when the fragment view is created
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,10 +42,12 @@ class UserDetailsFragment : Fragment() {
             val nameTextView: TextView = view.findViewById(R.id.nameTextView)
             val ageTextView: TextView = view.findViewById(R.id.ageTextView)
             val isStudentTextView: TextView = view.findViewById(R.id.isStudentTextView)
+            val descriptionTextView: TextView = view.findViewById(R.id.descriptionTextView)
 
             // Set the user details to the TextViews
             nameTextView.text = it.name
             ageTextView.text = it.age.toString()
+            descriptionTextView.text = it.description
             isStudentTextView.text = if (it.isStudent) "Student" else "Not a student"
         }
 

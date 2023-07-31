@@ -183,6 +183,7 @@ class MainActivity : AppCompatActivity() {
         val sortByNames = dialogView.findViewById<TextView>(R.id.sortByName)
         val sortByAge = dialogView.findViewById<TextView>(R.id.sortByAge)
         val sortByStudentStatus = dialogView.findViewById<TextView>(R.id.sortByStudentStatus)
+        val sortByDescription = dialogView.findViewById<TextView>(R.id.sortByDescriptionLength)
 
         // Click listeners for sorting options
         sortByNames.setOnClickListener {
@@ -197,6 +198,11 @@ class MainActivity : AppCompatActivity() {
 
         sortByStudentStatus.setOnClickListener {
             sortAndRefreshList(SortingOption.STUDENT_STATUS)
+            alertDialog.dismiss()
+        }
+
+        sortByDescription.setOnClickListener{
+            sortAndRefreshList(SortingOption.DESCRIPTION)
             alertDialog.dismiss()
         }
 
@@ -216,11 +222,15 @@ class MainActivity : AppCompatActivity() {
             SortingOption.STUDENT_STATUS -> {
                 userList.sortWith(compareBy<User> { !it.isStudent }.thenBy { it.name })
             }
-
+            SortingOption.DESCRIPTION -> {
+                userList.sortBy { it.description?.length }
+            }
         }
 
         adapter.notifyDataSetChanged()
     }
+
+
 
 
 
@@ -263,6 +273,7 @@ class MainActivity : AppCompatActivity() {
 enum class SortingOption {
     NAME,
     AGE,
-    STUDENT_STATUS
+    STUDENT_STATUS,
+    DESCRIPTION
 }
 

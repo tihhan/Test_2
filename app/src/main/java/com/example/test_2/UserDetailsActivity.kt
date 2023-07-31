@@ -23,10 +23,12 @@ class UserDetailsActivity : AppCompatActivity() {
             val nameTextView: TextView = findViewById(R.id.nameTextView)
             val ageTextView: TextView = findViewById(R.id.ageTextView)
             val isStudentTextView: TextView = findViewById(R.id.isStudentTextView)
+            val descriptionTextView: TextView = findViewById(R.id.descriptionTextView)
 
             // Set the user details to the TextViews
             nameTextView.text = it.name
             ageTextView.text = it.age.toString()
+            descriptionTextView.text = it.description
             isStudentTextView.text = if (it.isStudent) "Student" else "Not a student"
         }
     }
